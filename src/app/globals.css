@@ -10,11 +10,9 @@
 
 @layer base {
   body {
-    background: linear-gradient(to bottom right, #030712, #000000, #030712);
+  background: linear-gradient(to bottom right, #c1272c56, #006233b4, #c1272c7d);
   }
 }
-
-
 
 @layer components {
   .glass-card {

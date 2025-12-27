@@ -68,8 +68,8 @@ test.describe('Sistema de Fases', () => {
     })
     await page.reload()
     
-    await expect(page.getByText('GALA EN DIRECTO')).toBeVisible()
-    await expect(page.getByText('EN DIRECTO')).toBeVisible()
+    await expect(page.getByText('🔴 GALA EN DIRECTO')).toBeVisible()
+    await expect(page.getByText('EN DIRECTO', { exact: true })).toBeVisible()
   })
 
   test('fase de resultados muestra botón de resultados', async ({ page }) => {
