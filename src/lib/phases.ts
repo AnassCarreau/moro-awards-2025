@@ -2,12 +2,12 @@ import { EventPhase, PhaseInfo } from '@/types/database'
 
 // Fechas del evento (ajustar según necesidad)
 export const EVENT_DATES = {
-  proposals_start: new Date('2024-12-27T00:00:00Z'),
-  proposals_end: new Date('2024-12-28T00:00:00Z'),
-  nominations_end: new Date('2024-12-29T00:00:00Z'),
-  curation_end: new Date('2024-12-30T00:00:00Z'),
-  voting_end: new Date('2024-12-31T20:00:00Z'),
-  gala_start: new Date('2024-12-31T21:00:00Z'),
+  proposals_start: new Date('2025-12-28T00:00:00Z'),
+  proposals_end: new Date('2025-12-29T00:00:00Z'),
+  nominations_end: new Date('2025-12-30T00:00:00Z'),
+  curation_end: new Date('2025-12-31T00:00:00Z'),
+  voting_end: new Date('2025-12-31T20:00:00Z'),
+  gala_start: new Date('2025-12-31T21:00:00Z'),
 }
 
 export const PHASE_MESSAGES: Record<EventPhase, string> = {
@@ -39,17 +39,17 @@ export function getCurrentDate(): Date {
 function getDateForPhase(phase: EventPhase): Date {
   switch (phase) {
     case 'proposals':
-      return new Date('2024-12-27T12:00:00Z')
+      return new Date('2025-12-28T12:00:00Z')
     case 'nominations':
-      return new Date('2024-12-28T12:00:00Z')
+      return new Date('2025-12-29T12:00:00Z')
     case 'curation':
-      return new Date('2024-12-29T12:00:00Z')
+      return new Date('2025-12-30T12:00:00Z')
     case 'voting':
-      return new Date('2024-12-30T12:00:00Z')
+      return new Date('2025-12-31T12:00:00Z')
     case 'gala':
-      return new Date('2024-12-31T21:30:00Z')
+      return new Date('2025-12-31T21:30:00Z')
     case 'results':
-      return new Date('2025-01-01T12:00:00Z')
+      return new Date('2026-01-01T12:00:00Z')
     default:
       return new Date()
   }
