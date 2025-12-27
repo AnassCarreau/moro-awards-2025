@@ -9,7 +9,7 @@ interface AuthContextType {
   user: User | null
   profile: Profile | null
   loading: boolean
-  signIn: (provider: 'twitter' | 'google' | 'discord') => Promise<void>
+  signIn: (provider: 'x' | 'google' | 'discord') => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -60,7 +60,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe()
   }, [])
 
-  const signIn = async (provider: 'twitter' | 'google' | 'discord') => {
+  const signIn = async (provider: 'x' | 'google' | 'discord') => {
     await supabase.auth.signInWithOAuth({
       provider,
       options: {

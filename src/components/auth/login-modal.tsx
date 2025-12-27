@@ -14,7 +14,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const { signIn } = useAuth()
   const [loading, setLoading] = useState<string | null>(null)
 
-  const handleSignIn = async (provider: 'twitter' | 'google' | 'discord') => {
+  const handleSignIn = async (provider: 'x' | 'google' | 'discord') => {
     setLoading(provider)
     try {
       await signIn(provider)
@@ -58,11 +58,11 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
             <div className="space-y-4">
               {/* Twitter/X */}
               <button
-                onClick={() => handleSignIn('twitter')}
+                onClick={() => handleSignIn('x')}
                 disabled={loading !== null}
                 className="w-full flex items-center justify-center gap-3 bg-black border border-gray-700 hover:border-gray-500 text-white py-3 px-4 rounded-xl transition-all disabled:opacity-50"
               >
-                {loading === 'twitter' ? (
+                {loading === 'x' ? (
                   <Spinner />
                 ) : (
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
