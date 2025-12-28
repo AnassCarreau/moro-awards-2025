@@ -2,12 +2,12 @@ import { EventPhase, PhaseInfo } from "@/types/database";
 
 // Fechas del evento (ajustar según necesidad)
 export const EVENT_DATES = {
-  proposals_start: new Date("2025-12-27T23:05:00Z"), // Empieza en 5 min
-  proposals_end: new Date("2025-12-27T23:10:00Z"), // Termina en 10 min
-  nominations_end: new Date("2025-12-27T23:15:00Z"), // Termina en 15 min
-  curation_end: new Date("2025-12-27T23:20:00Z"), // Termina en 20 min
-  voting_end: new Date("2025-12-27T23:25:00Z"), // Termina en 25 min
-  gala_start: new Date("2025-12-27T23:25:00Z"), // Empieza en 25 min
+  proposals_start: new Date("2025-12-28T23:05:00Z"), // Empieza en 5 min
+  proposals_end: new Date("2025-12-28T23:10:00Z"), // Termina en 10 min
+  nominations_end: new Date("2025-12-28T23:15:00Z"), // Termina en 15 min
+  curation_end: new Date("2025-12-28T23:20:00Z"), // Termina en 20 min
+  voting_end: new Date("2025-12-28T23:25:00Z"), // Termina en 25 min
+  gala_start: new Date("2025-12-28T23:25:00Z"), // Empieza en 25 min
 };
 
 export const PHASE_MESSAGES: Record<EventPhase, string> = {
