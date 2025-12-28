@@ -5,12 +5,18 @@ import {
   EventDates,
 } from "@/types/database";
 
-// Cache local de la configuración
+// =============================================
+// CACHE
+// =============================================
+
 let configCache: EventConfig | null = null;
 let configCacheTime: number = 0;
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
-// Configuración por defecto (fallback si falla la API)
+// =============================================
+// CONFIGURACIÓN POR DEFECTO (FALLBACK)
+// =============================================
+
 const DEFAULT_CONFIG: EventConfig = {
   id: 1,
   proposals_start: "2024-12-27T00:00:00Z",
@@ -29,6 +35,10 @@ const DEFAULT_CONFIG: EventConfig = {
   updated_at: new Date().toISOString(),
 };
 
+// =============================================
+// MENSAJES DE FASE
+// =============================================
+
 export const PHASE_MESSAGES: Record<EventPhase, string> = {
   proposals: "🎯 PROPÓN LA CATEGORÍA ESPECIAL",
   nominations: "📝 CIERRE DE NOMINACIONES",
@@ -38,8 +48,12 @@ export const PHASE_MESSAGES: Record<EventPhase, string> = {
   results: "🏆 RESULTADOS FINALES",
 };
 
+// =============================================
+// FUNCIONES DE CONFIGURACIÓN
+// =============================================
+
 /**
- * Obtiene la configuración del evento (con cache)
+ * Obtiene la configuración del evento desde la API (con cache)
  */
 export async function getEventConfig(): Promise<EventConfig> {
   const now = Date.now();
@@ -51,7 +65,7 @@ export async function getEventConfig(): Promise<EventConfig> {
 
   try {
     const response = await fetch("/api/config", {
-      next: { revalidate: 60 }, // Cache de Next.js
+      next: { revalidate: 60 },
     });
 
     if (!response.ok) {
@@ -87,7 +101,19 @@ export function invalidateConfigCache(): void {
 }
 
 /**
- * Convierte la configuración a fechas de Date
+ * Actualiza el cache directamente (para SSR)
+ */
+export function setConfigCache(config: EventConfig): void {
+  configCache = config;
+  configCacheTime = Date.now();
+}
+
+// =============================================
+// FUNCIONES DE FECHAS
+// =============================================
+
+/**
+ * Convierte la configuración a objetos Date
  */
 export function configToDates(config: EventConfig): EventDates {
   return {
@@ -113,7 +139,7 @@ export function getCurrentDate(): Date {
     }
   }
 
-  // Override desde variable de entorno (para testing)
+  // Override desde variable de entorno (para testing en CI)
   const overrideDate = process.env.NEXT_PUBLIC_OVERRIDE_DATE;
   if (overrideDate) {
     return new Date(overrideDate);
@@ -130,7 +156,7 @@ function getDateForPhase(phase: EventPhase, config: EventConfig): Date {
 
   switch (phase) {
     case "proposals":
-      return new Date(dates.proposalsStart.getTime() + 12 * 60 * 60 * 1000); // +12h
+      return new Date(dates.proposalsStart.getTime() + 12 * 60 * 60 * 1000);
     case "nominations":
       return new Date(dates.proposalsEnd.getTime() + 12 * 60 * 60 * 1000);
     case "curation":
@@ -138,13 +164,17 @@ function getDateForPhase(phase: EventPhase, config: EventConfig): Date {
     case "voting":
       return new Date(dates.curationEnd.getTime() + 12 * 60 * 60 * 1000);
     case "gala":
-      return new Date(dates.galaStart.getTime() + 30 * 60 * 1000); // +30min
+      return new Date(dates.galaStart.getTime() + 30 * 60 * 1000);
     case "results":
       return new Date(dates.galaEnd.getTime() + 12 * 60 * 60 * 1000);
     default:
       return new Date();
   }
 }
+
+// =============================================
+// CÁLCULO DE FASE
+// =============================================
 
 /**
  * Calcula la fase actual basándose en la configuración
@@ -153,24 +183,24 @@ export function calculatePhase(
   config: EventConfig,
   date: Date = getCurrentDate()
 ): EventPhase {
-  // Si hay una fase forzada en la config, usarla
+  // 1. Si hay una fase forzada en la config, usarla
   if (config.force_phase) {
     return config.force_phase;
   }
 
-  // Si los resultados son públicos, mostrar resultados
+  // 2. Si los resultados son públicos, mostrar resultados
   if (config.results_public) {
     return "results";
   }
 
-  // Si la gala está activa, mostrar gala
+  // 3. Si la gala está activa, mostrar gala
   if (config.gala_active) {
     return "gala";
   }
 
+  // 4. Calcular fase basándose en fechas
   const dates = configToDates(config);
 
-  // Calcular fase basándose en fechas
   if (date < dates.proposalsStart) {
     return "proposals"; // Aún no empieza, mostrar cuenta atrás
   }
@@ -235,9 +265,10 @@ export function getPhaseInfo(
   };
 }
 
-/**
- * Helpers para verificar permisos
- */
+// =============================================
+// HELPERS DE PERMISOS
+// =============================================
+
 export function canNominate(phase: EventPhase): boolean {
   return phase === "proposals" || phase === "nominations";
 }
@@ -252,4 +283,8 @@ export function canViewResults(phase: EventPhase): boolean {
 
 export function isGalaActive(phase: EventPhase): boolean {
   return phase === "gala";
+}
+
+export function isCurationPhase(phase: EventPhase): boolean {
+  return phase === "curation";
 }
