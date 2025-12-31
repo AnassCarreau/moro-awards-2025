@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { usePhase } from "@/components/providers/phase-provider";
 import { useAuth } from "@/components/providers/auth-provider";
 import { canNominate, canVote } from "@/lib/phases";
-import { Send, Vote, Trophy, User, LogOut, Loader2 } from "lucide-react";
+import { Send, Vote, Trophy, User, LogOut, Loader2, Radio } from "lucide-react";
 import { useState } from "react";
 import { LoginModal } from "@/components/auth/login-modal";
 
@@ -135,7 +135,21 @@ export function MainNavigation() {
               )}
             </motion.div>
           )}
-
+          {phase === "gala" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex-1"
+            >
+              <Link
+                href="/gala"
+                className="flex items-center justify-center gap-2 w-full py-4 px-6 bg-red-500 text-white font-bold rounded-xl hover:bg-red-600 transition-colors animate-pulse"
+              >
+                <Radio size={20} />
+                <span>VER GALA EN VIVO</span>
+              </Link>
+            </motion.div>
+          )}
           {phase === "results" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}

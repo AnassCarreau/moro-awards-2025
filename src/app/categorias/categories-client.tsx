@@ -1,48 +1,54 @@
-'use client'
+"use client";
 
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Category } from '@/types/database'
-import { usePhase } from '@/components/providers/phase-provider'
-import { useAuth } from '@/components/providers/auth-provider'
-import { NominationForm } from '@/components/nominations/nomination-form'
-import { LoginModal } from '@/components/auth/login-modal'
-import { canNominate, canVote } from '@/lib/phases'
-import { ChevronRight, Trophy, Lock, Check } from 'lucide-react'
-import Link from 'next/link'
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Category } from "@/types/database";
+import { usePhase } from "@/components/providers/phase-provider";
+import { useAuth } from "@/components/providers/auth-provider";
+import { NominationForm } from "@/components/nominations/nomination-form";
+import { LoginModal } from "@/components/auth/login-modal";
+import { canNominate, canVote } from "@/lib/phases";
+import { ChevronRight, Trophy, Lock, Check } from "lucide-react";
+import Link from "next/link";
 
 interface CategoriesClientProps {
-  initialCategories: Category[]
+  initialCategories: Category[];
 }
 
 export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
-  const { phase } = usePhase()
-  const { user } = useAuth()
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null)
-  const [showLogin, setShowLogin] = useState(false)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const { phase } = usePhase();
+  const { user } = useAuth();
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+    null
+  );
+  const [showLogin, setShowLogin] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const isNominationOpen = canNominate(phase)
-  const isVotingOpen = canVote(phase)
+  const isNominationOpen = canNominate(phase);
+  const isVotingOpen = canVote(phase);
 
   const handleNominationSuccess = () => {
-    setSuccessMessage('¡Nominación enviada con éxito!')
+    setSuccessMessage("¡Nominación enviada con éxito!");
     setTimeout(() => {
-      setSuccessMessage(null)
-      setSelectedCategory(null)
-    }, 2000)
-  }
+      setSuccessMessage(null);
+      setSelectedCategory(null);
+    }, 2000);
+  };
 
   const getModeLabel = (mode: string): string => {
     switch (mode) {
-      case 'user': return '👤 Usuario'
-      case 'link': return '🔗 Enlace'
-      case 'text': return '📝 Texto'
-      case 'link_or_text': return '🔗/📝 Enlace o Texto'
-      case 'proposal': return '💡 Propuesta'
-      default: return mode
+      case "user":
+        return "👤 Usuario";
+      case "link":
+        return "🔗 Enlace";
+      case "text":
+        return "📝 Texto";
+      case "link_or_text":
+        return "🔗/📝 Enlace o Texto";
+      default:
+        return mode;
     }
-  }
+  };
 
   return (
     <div className="min-h-screen py-12 px-4">
@@ -50,15 +56,17 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
         {/* Header */}
         <div className="text-center mb-12">
           <Link href="/" className="inline-block mb-6">
-            <h1 className="text-3xl font-bold gold-text">🏆 Moro TW Awards 2025</h1>
+            <h1 className="text-3xl font-bold gold-text">
+              🏆 Moro TW Awards 2025
+            </h1>
           </Link>
           <h2 className="text-2xl font-bold text-white mb-2">Categorías</h2>
           <p className="text-gray-400">
             {isNominationOpen
-              ? 'Selecciona una categoría para enviar tu nominación'
+              ? "Selecciona una categoría para enviar tu nominación"
               : isVotingOpen
-              ? '¡La votación está abierta!'
-              : 'Las nominaciones están cerradas'}
+              ? "¡La votación está abierta!"
+              : "Las nominaciones están cerradas"}
           </p>
         </div>
 
@@ -74,14 +82,14 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
               <button
                 onClick={() => {
                   if (isNominationOpen || isVotingOpen) {
-                    setSelectedCategory(category)
+                    setSelectedCategory(category);
                   }
                 }}
                 disabled={!isNominationOpen && !isVotingOpen}
                 className={`w-full glass-card p-4 flex items-center justify-between transition-all ${
                   isNominationOpen || isVotingOpen
-                    ? 'hover:border-yellow-500/30 hover:bg-white/10 cursor-pointer'
-                    : 'opacity-50 cursor-not-allowed'
+                    ? "hover:border-yellow-500/30 hover:bg-white/10 cursor-pointer"
+                    : "opacity-50 cursor-not-allowed"
                 }`}
               >
                 <div className="flex items-center gap-4">
@@ -90,27 +98,12 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
                   </span>
                   <div className="text-left">
                     <h3 className="font-semibold text-white">
-                      {category.is_special && category.special_title
-                        ? category.special_title
-                        : category.name}
+                      {category.name}
                     </h3>
                     <p className="text-sm text-gray-400">
                       {getModeLabel(category.mode)}
                     </p>
                   </div>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  {category.is_special && (
-                    <span className="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded-full">
-                      Especial
-                    </span>
-                  )}
-                  {isNominationOpen || isVotingOpen ? (
-                    <ChevronRight className="text-gray-500" size={20} />
-                  ) : (
-                    <Lock className="text-gray-500" size={18} />
-                  )}
                 </div>
               </button>
             </motion.div>
@@ -144,7 +137,9 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
                   >
                     <Check size={32} className="text-white" />
                   </motion.div>
-                  <p className="text-xl font-semibold text-white">{successMessage}</p>
+                  <p className="text-xl font-semibold text-white">
+                    {successMessage}
+                  </p>
                 </div>
               ) : (
                 <>
@@ -152,22 +147,22 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
                     <Trophy className="text-yellow-500" size={24} />
                     <div>
                       <h3 className="text-xl font-bold text-white">
-                        {selectedCategory.is_special && selectedCategory.special_title
-                          ? selectedCategory.special_title
-                          : selectedCategory.name}
+                        {selectedCategory.name}
                       </h3>
                       {selectedCategory.description && (
-                        <p className="text-sm text-gray-400">{selectedCategory.description}</p>
+                        <p className="text-sm text-gray-400">
+                          {selectedCategory.description}
+                        </p>
                       )}
                     </div>
                   </div>
-                  
+
                   <NominationForm
                     category={selectedCategory}
                     onSuccess={handleNominationSuccess}
                     onLoginRequired={() => setShowLogin(true)}
                   />
-                  
+
                   <button
                     onClick={() => setSelectedCategory(null)}
                     className="mt-4 w-full text-center text-gray-400 hover:text-white transition-colors py-2"
@@ -183,5 +178,5 @@ export function CategoriesClient({ initialCategories }: CategoriesClientProps) {
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
     </div>
-  )
+  );
 }

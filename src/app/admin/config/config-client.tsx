@@ -21,7 +21,6 @@ interface ConfigClientProps {
 
 const PHASES: { value: EventPhase | "auto"; label: string; emoji: string }[] = [
   { value: "auto", label: "Automático (usar fechas)", emoji: "🤖" },
-  { value: "proposals", label: "Propuestas", emoji: "💡" },
   { value: "nominations", label: "Nominaciones", emoji: "📝" },
   { value: "curation", label: "Curación", emoji: "⏳" },
   { value: "voting", label: "Votación", emoji: "🗳️" },
@@ -224,16 +223,10 @@ export function ConfigClient({ initialConfig }: ConfigClientProps) {
           <div className="grid grid-cols-2 gap-4">
             {/* Propuestas */}
             <DateInput
-              label="Inicio Propuestas (Día 1)"
-              value={formatDateForInput(config.proposals_start)}
-              onChange={(v) => handleDateChange("proposals_start", v)}
+              label="Inicio Nominaciones (Día 1)"
+              value={formatDateForInput(config.nominations_start)}
+              onChange={(v) => handleDateChange("nominations_start", v)}
             />
-            <DateInput
-              label="Fin Propuestas"
-              value={formatDateForInput(config.proposals_end)}
-              onChange={(v) => handleDateChange("proposals_end", v)}
-            />
-
             {/* Nominaciones */}
             <DateInput
               label="Fin Nominaciones (Día 2)"
@@ -270,51 +263,6 @@ export function ConfigClient({ initialConfig }: ConfigClientProps) {
             />
           </div>
         </div>
-
-        {/* Categoría especial */}
-        <div className="glass-card p-6 mb-6">
-          <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-            ⭐ Categoría Especial (Día 20)
-          </h2>
-
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm text-gray-400 mb-2">
-                Título de la categoría (se define el Día 1)
-              </label>
-              <input
-                type="text"
-                value={config.special_category_title || ""}
-                onChange={(e) =>
-                  setConfig({
-                    ...config,
-                    special_category_title: e.target.value || null,
-                  })
-                }
-                placeholder="Ej: Premio al Más Pesado"
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-500/50"
-              />
-            </div>
-
-            <label className="flex items-center gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={config.special_category_decided}
-                onChange={(e) =>
-                  setConfig({
-                    ...config,
-                    special_category_decided: e.target.checked,
-                  })
-                }
-                className="w-5 h-5 rounded border-gray-600 bg-white/5 text-yellow-500 focus:ring-yellow-500"
-              />
-              <span className="text-gray-300">
-                Título decidido (cambiar a modo nominación de candidatos)
-              </span>
-            </label>
-          </div>
-        </div>
-
         {/* Error */}
         {error && (
           <motion.div

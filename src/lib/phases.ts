@@ -19,18 +19,15 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
 
 const DEFAULT_CONFIG: EventConfig = {
   id: 1,
-  proposals_start: "2024-12-27T00:00:00Z",
-  proposals_end: "2024-12-28T00:00:00Z",
-  nominations_end: "2024-12-29T00:00:00Z",
-  curation_end: "2024-12-30T00:00:00Z",
-  voting_end: "2024-12-31T20:00:00Z",
-  gala_start: "2024-12-31T21:00:00Z",
-  gala_end: "2025-01-01T02:00:00Z",
+  nominations_start: "2025-12-27T00:00:00Z",
+  nominations_end: "2025-12-29T00:00:00Z",
+  curation_end: "2025-12-30T00:00:00Z",
+  voting_end: "2025-12-31T20:00:00Z",
+  gala_start: "2025-12-31T21:00:00Z",
+  gala_end: "2026-01-01T02:00:00Z",
   force_phase: null,
   gala_active: false,
   results_public: false,
-  special_category_title: null,
-  special_category_decided: false,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
 };
@@ -40,7 +37,6 @@ const DEFAULT_CONFIG: EventConfig = {
 // =============================================
 
 export const PHASE_MESSAGES: Record<EventPhase, string> = {
-  proposals: "🎯 PROPÓN LA CATEGORÍA ESPECIAL",
   nominations: "📝 CIERRE DE NOMINACIONES",
   curation: "⏳ CERRADO: PROCESANDO FINALISTAS",
   voting: "🗳️ LA VOTACIÓN FINAL TERMINA EN...",
@@ -117,8 +113,7 @@ export function setConfigCache(config: EventConfig): void {
  */
 export function configToDates(config: EventConfig): EventDates {
   return {
-    proposalsStart: new Date(config.proposals_start),
-    proposalsEnd: new Date(config.proposals_end),
+    nominationsStart: new Date(config.nominations_start),
     nominationsEnd: new Date(config.nominations_end),
     curationEnd: new Date(config.curation_end),
     votingEnd: new Date(config.voting_end),
@@ -155,10 +150,8 @@ function getDateForPhase(phase: EventPhase, config: EventConfig): Date {
   const dates = configToDates(config);
 
   switch (phase) {
-    case "proposals":
-      return new Date(dates.proposalsStart.getTime() + 12 * 60 * 60 * 1000);
     case "nominations":
-      return new Date(dates.proposalsEnd.getTime() + 12 * 60 * 60 * 1000);
+      return new Date(dates.nominationsStart.getTime() + 12 * 60 * 60 * 1000);
     case "curation":
       return new Date(dates.nominationsEnd.getTime() + 12 * 60 * 60 * 1000);
     case "voting":
@@ -183,42 +176,16 @@ export function calculatePhase(
   config: EventConfig,
   date: Date = getCurrentDate()
 ): EventPhase {
-  // 1. Si hay una fase forzada en la config, usarla
-  if (config.force_phase) {
-    return config.force_phase;
-  }
+  if (config.force_phase) return config.force_phase;
+  if (config.results_public) return "results";
+  if (config.gala_active) return "gala";
 
-  // 2. Si los resultados son públicos, mostrar resultados
-  if (config.results_public) {
-    return "results";
-  }
-
-  // 3. Si la gala está activa, mostrar gala
-  if (config.gala_active) {
-    return "gala";
-  }
-
-  // 4. Calcular fase basándose en fechas
   const dates = configToDates(config);
 
-  if (date < dates.proposalsStart) {
-    return "proposals"; // Aún no empieza, mostrar cuenta atrás
-  }
-  if (date < dates.proposalsEnd) {
-    return "proposals";
-  }
-  if (date < dates.nominationsEnd) {
-    return "nominations";
-  }
-  if (date < dates.curationEnd) {
-    return "curation";
-  }
-  if (date < dates.votingEnd) {
-    return "voting";
-  }
-  if (date < dates.galaEnd) {
-    return "gala";
-  }
+  if (date < dates.nominationsEnd) return "nominations";
+  if (date < dates.curationEnd) return "curation";
+  if (date < dates.votingEnd) return "voting";
+  if (date < dates.galaEnd) return "gala";
 
   return "results";
 }
@@ -237,9 +204,6 @@ export function getPhaseInfo(
   let showCountdown = true;
 
   switch (currentPhase) {
-    case "proposals":
-      endDate = dates.proposalsEnd;
-      break;
     case "nominations":
       endDate = dates.nominationsEnd;
       break;
@@ -270,7 +234,7 @@ export function getPhaseInfo(
 // =============================================
 
 export function canNominate(phase: EventPhase): boolean {
-  return phase === "proposals" || phase === "nominations";
+  return phase === "nominations";
 }
 
 export function canVote(phase: EventPhase): boolean {

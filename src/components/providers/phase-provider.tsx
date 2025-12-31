@@ -29,10 +29,10 @@ const PhaseContext = createContext<PhaseContextType | undefined>(undefined);
 
 export function PhaseProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<EventConfig | null>(null);
-  const [phase, setPhase] = useState<EventPhase>("proposals");
+  const [phase, setPhase] = useState<EventPhase>("nominations");
   const [phaseInfo, setPhaseInfo] = useState<PhaseInfo>({
-    phase: "proposals",
-    message: "🎯 PROPÓN LA CATEGORÍA ESPECIAL",
+    phase: "nominations",
+    message: "📝 CIERRE DE NOMINACIONES",
     endDate: null,
     showCountdown: true,
   });

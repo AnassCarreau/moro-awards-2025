@@ -27,8 +27,7 @@ export async function PUT(request: Request) {
 
   // Validar campos requeridos
   const requiredFields = [
-    "proposals_start",
-    "proposals_end",
+    "nominations_start",
     "nominations_end",
     "curation_end",
     "voting_end",
@@ -50,8 +49,7 @@ export async function PUT(request: Request) {
   const { data, error } = await adminClient
     .from("event_config")
     .update({
-      proposals_start: body.proposals_start,
-      proposals_end: body.proposals_end,
+      nominations_start: body.nominations_start,
       nominations_end: body.nominations_end,
       curation_end: body.curation_end,
       voting_end: body.voting_end,
@@ -71,16 +69,6 @@ export async function PUT(request: Request) {
     console.error("Error updating config:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
-
-  // Log de la acción
-  await adminClient.from("admin_logs").insert({
-    admin_id: user.id,
-    action: "update_config",
-    details: {
-      changes: body,
-      timestamp: new Date().toISOString(),
-    },
-  });
 
   return NextResponse.json(data);
 }

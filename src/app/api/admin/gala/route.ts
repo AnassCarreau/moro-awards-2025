@@ -41,14 +41,6 @@ export async function POST(request: Request) {
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
-    
-    // Log
-    await adminClient.from('admin_logs').insert({
-      admin_id: user.id,
-      action: 'reveal_finalist',
-      details: { finalist_id, position },
-    })
-    
     return NextResponse.json(data)
   }
   

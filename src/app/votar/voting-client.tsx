@@ -1,106 +1,106 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { Category, Finalist } from '@/types/database'
-import { usePhase } from '@/components/providers/phase-provider'
-import { useAuth } from '@/components/providers/auth-provider'
-import { LoginModal } from '@/components/auth/login-modal'
-import { canVote } from '@/lib/phases'
-import { 
-  Trophy, 
-  Check, 
-  ChevronLeft, 
-  ChevronRight,
-  Lock
-} from 'lucide-react'
-import Link from 'next/link'
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Category, Finalist } from "@/types/database";
+import { usePhase } from "@/components/providers/phase-provider";
+import { useAuth } from "@/components/providers/auth-provider";
+import { LoginModal } from "@/components/auth/login-modal";
+import { canVote } from "@/lib/phases";
+import { Trophy, Check, ChevronLeft, ChevronRight, Lock } from "lucide-react";
+import Link from "next/link";
 
 interface VotingClientProps {
-  categories: Category[]
-  finalists: Finalist[]
+  categories: Category[];
+  finalists: Finalist[];
 }
 
 export function VotingClient({ categories, finalists }: VotingClientProps) {
-  const { phase } = usePhase()
-  const { user } = useAuth()
-  const [currentCategory, setCurrentCategory] = useState(0)
-  const [userVotes, setUserVotes] = useState<Record<number, string>>({})
-  const [showLogin, setShowLogin] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [votedCategories, setVotedCategories] = useState<Set<number>>(new Set())
+  const { phase } = usePhase();
+  const { user } = useAuth();
+  const [currentCategory, setCurrentCategory] = useState(0);
+  const [userVotes, setUserVotes] = useState<Record<number, string>>({});
+  const [showLogin, setShowLogin] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [votedCategories, setVotedCategories] = useState<Set<number>>(
+    new Set()
+  );
 
-  const isVotingOpen = canVote(phase)
-  const category = categories[currentCategory]
-  const categoryFinalists = finalists.filter(f => f.category_id === category?.id)
+  const isVotingOpen = canVote(phase);
+  const category = categories[currentCategory];
+  const categoryFinalists = finalists.filter(
+    (f) => f.category_id === category?.id
+  );
 
   // Cargar votos existentes del usuario
   useEffect(() => {
     if (user) {
-      fetch('/api/votes')
-        .then(res => res.json())
-        .then(data => {
+      fetch("/api/votes")
+        .then((res) => res.json())
+        .then((data) => {
           if (Array.isArray(data)) {
-            const votes: Record<number, string> = {}
-            const voted = new Set<number>()
-            data.forEach((vote: { category_id: number; finalist_id: string }) => {
-              votes[vote.category_id] = vote.finalist_id
-              voted.add(vote.category_id)
-            })
-            setUserVotes(votes)
-            setVotedCategories(voted)
+            const votes: Record<number, string> = {};
+            const voted = new Set<number>();
+            data.forEach(
+              (vote: { category_id: number; finalist_id: string }) => {
+                votes[vote.category_id] = vote.finalist_id;
+                voted.add(vote.category_id);
+              }
+            );
+            setUserVotes(votes);
+            setVotedCategories(voted);
           }
         })
-        .catch(console.error)
+        .catch(console.error);
     }
-  }, [user])
+  }, [user]);
 
   const handleVote = async (finalist: Finalist) => {
     if (!user) {
-      setShowLogin(true)
-      return
+      setShowLogin(true);
+      return;
     }
 
     if (votedCategories.has(category.id)) {
-      return // Ya votó
+      return; // Ya votó
     }
 
-    setLoading(true)
+    setLoading(true);
 
     try {
-      const response = await fetch('/api/votes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const response = await fetch("/api/votes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           finalist_id: finalist.id,
           category_id: category.id,
         }),
-      })
+      });
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error)
+        const error = await response.json();
+        throw new Error(error.error);
       }
 
-      setUserVotes({ ...userVotes, [category.id]: finalist.id })
-      setVotedCategories(new Set([...votedCategories, category.id]))
-      
+      setUserVotes({ ...userVotes, [category.id]: finalist.id });
+      setVotedCategories(new Set([...votedCategories, category.id]));
+
       // Avanzar a siguiente categoría después de votar
       setTimeout(() => {
         if (currentCategory < categories.length - 1) {
-          setCurrentCategory(currentCategory + 1)
+          setCurrentCategory(currentCategory + 1);
         }
-      }, 1500)
+      }, 1500);
     } catch (error) {
-      console.error(error)
-      alert(error instanceof Error ? error.message : 'Error al votar')
+      console.error(error);
+      alert(error instanceof Error ? error.message : "Error al votar");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const hasVotedCurrent = votedCategories.has(category?.id)
-  const currentVote = userVotes[category?.id]
+  const hasVotedCurrent = votedCategories.has(category?.id);
+  const currentVote = userVotes[category?.id];
 
   if (!isVotingOpen) {
     return (
@@ -111,9 +111,9 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
             Votación cerrada
           </h2>
           <p className="text-gray-400 mb-6">
-            {phase === 'gala' 
-              ? 'La gala está en curso. ¡Atento a los resultados!'
-              : 'La votación aún no ha comenzado o ya ha terminado.'}
+            {phase === "gala"
+              ? "La gala está en curso. ¡Atento a los resultados!"
+              : "La votación aún no ha comenzado o ya ha terminado."}
           </p>
           <Link
             href="/"
@@ -123,7 +123,7 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -132,10 +132,12 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
         {/* Header */}
         <div className="text-center mb-8">
           <Link href="/" className="inline-block mb-4">
-            <h1 className="text-2xl font-bold gold-text">🏆 Moro TW Awards 2025</h1>
+            <h1 className="text-2xl font-bold gold-text">
+              🏆 Moro TW Awards 2025
+            </h1>
           </Link>
           <h2 className="text-xl text-white">Votación Final</h2>
-          
+
           {/* Progress */}
           <div className="mt-4 flex justify-center gap-1">
             {categories.map((cat, index) => (
@@ -143,10 +145,10 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
                 key={cat.id}
                 className={`w-3 h-3 rounded-full transition-colors ${
                   votedCategories.has(cat.id)
-                    ? 'bg-green-500'
+                    ? "bg-green-500"
                     : index === currentCategory
-                    ? 'bg-yellow-500'
-                    : 'bg-gray-700'
+                    ? "bg-yellow-500"
+                    : "bg-gray-700"
                 }`}
               />
             ))}
@@ -170,12 +172,12 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
               </span>
               <div>
                 <h3 className="text-xl font-bold text-white">
-                  {category.is_special && category.special_title
-                    ? category.special_title
-                    : category.name}
+                  {category.name}
                 </h3>
                 {category.description && (
-                  <p className="text-sm text-gray-400">{category.description}</p>
+                  <p className="text-sm text-gray-400">
+                    {category.description}
+                  </p>
                 )}
               </div>
             </div>
@@ -195,8 +197,8 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
             {/* Finalistas */}
             <div className="space-y-3">
               {categoryFinalists.map((finalist) => {
-                const isSelected = currentVote === finalist.id
-                
+                const isSelected = currentVote === finalist.id;
+
                 return (
                   <motion.button
                     key={finalist.id}
@@ -206,10 +208,10 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
                     disabled={hasVotedCurrent || loading}
                     className={`w-full p-4 rounded-xl border transition-all text-left ${
                       isSelected
-                        ? 'bg-yellow-500/20 border-yellow-500'
+                        ? "bg-yellow-500/20 border-yellow-500"
                         : hasVotedCurrent
-                        ? 'bg-white/5 border-white/10 opacity-50'
-                        : 'bg-white/5 border-white/10 hover:border-yellow-500/50 hover:bg-white/10'
+                        ? "bg-white/5 border-white/10 opacity-50"
+                        : "bg-white/5 border-white/10 hover:border-yellow-500/50 hover:bg-white/10"
                     }`}
                   >
                     <div className="flex items-center gap-4">
@@ -235,7 +237,7 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
                           </p>
                         )}
                       </div>
-                      
+
                       {isSelected && (
                         <motion.div
                           initial={{ scale: 0 }}
@@ -247,7 +249,7 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
                       )}
                     </div>
                   </motion.button>
-                )
+                );
               })}
             </div>
 
@@ -268,9 +270,13 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
             <ChevronLeft size={20} />
             Anterior
           </button>
-          
+
           <button
-            onClick={() => setCurrentCategory(Math.min(categories.length - 1, currentCategory + 1))}
+            onClick={() =>
+              setCurrentCategory(
+                Math.min(categories.length - 1, currentCategory + 1)
+              )
+            }
             disabled={currentCategory === categories.length - 1}
             className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 disabled:opacity-30 rounded-xl transition-colors"
           >
@@ -282,5 +288,5 @@ export function VotingClient({ categories, finalists }: VotingClientProps) {
 
       <LoginModal isOpen={showLogin} onClose={() => setShowLogin(false)} />
     </div>
-  )
+  );
 }

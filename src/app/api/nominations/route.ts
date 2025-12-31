@@ -69,7 +69,6 @@ export async function POST(request: Request) {
     nominated_link,
     nominated_text,
     is_deleted_content,
-    title_proposal,
   } = body;
 
   // Verificar si ya existe una nominación similar para agrupar
@@ -111,7 +110,6 @@ export async function POST(request: Request) {
       nominated_link,
       nominated_text,
       is_deleted_content,
-      title_proposal,
     })
     .select()
     .single();
