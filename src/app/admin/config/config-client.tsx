@@ -279,8 +279,7 @@ export function ConfigClient({ initialConfig }: ConfigClientProps) {
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-500">
             <Clock size={14} className="inline mr-1" />
-            Última actualización:{" "}
-            {new Date(config.updated_at).toLocaleString("es-ES")}
+            Configuración del Evento
           </p>
 
           <button

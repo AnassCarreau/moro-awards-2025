@@ -16,7 +16,7 @@ export default async function GalaPage() {
 
   const { data: config } = await supabase
     .from("event_config")
-    .select("gala_active, special_category_title")
+    .select("gala_active")
     .eq("id", 1)
     .single();
 
@@ -25,7 +25,6 @@ export default async function GalaPage() {
       categories={categories || []}
       initialFinalists={finalists || []}
       isGalaActive={config?.gala_active || false}
-      specialCategoryTitle={config?.special_category_title}
     />
   );
 }

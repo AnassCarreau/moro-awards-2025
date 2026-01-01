@@ -17,7 +17,7 @@ interface AuthContextType {
   profile: Profile | null;
   session: Session | null;
   loading: boolean;
-  signIn: (provider: "x" | "google" | "discord") => Promise<void>;
+  signIn: () => Promise<void>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -133,21 +133,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     };
   }, [supabase, loadProfile]);
 
-  const signIn = useCallback(
-    async (provider: "x" | "google" | "discord") => {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
-      if (error) {
-        console.error("Error signing in:", error);
-        throw error;
-      }
-    },
-    [supabase]
-  );
+  const signIn = useCallback(async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    });
+    if (error) {
+      console.error("Error signing in:", error);
+      throw error;
+    }
+  }, [supabase]);
 
   const signOut = useCallback(async () => {
     setLoading(true);

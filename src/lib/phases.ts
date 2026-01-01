@@ -28,8 +28,6 @@ const DEFAULT_CONFIG: EventConfig = {
   force_phase: null,
   gala_active: false,
   results_public: false,
-  created_at: new Date().toISOString(),
-  updated_at: new Date().toISOString(),
 };
 
 // =============================================

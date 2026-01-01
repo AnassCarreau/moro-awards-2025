@@ -20,7 +20,6 @@ export interface Profile {
   username: string | null;
   avatar_url: string | null;
   is_admin: boolean;
-  created_at: string;
 }
 
 export interface Nomination {
@@ -32,7 +31,6 @@ export interface Nomination {
   nominated_text: string | null;
   is_deleted_content: boolean;
   nomination_count: number;
-  created_at: string;
 }
 
 export interface Finalist {
@@ -47,7 +45,6 @@ export interface Finalist {
   final_position: number | null;
   is_revealed: boolean;
   revealed_at: string | null;
-  created_at: string;
 }
 
 export interface Vote {
@@ -55,7 +52,6 @@ export interface Vote {
   user_id: string;
   finalist_id: string;
   category_id: number;
-  created_at: string;
 }
 
 export interface PhaseInfo {
@@ -78,9 +74,6 @@ export interface EventConfig {
   force_phase: EventPhase | null;
   gala_active: boolean;
   results_public: boolean;
-  // Metadata
-  created_at: string;
-  updated_at: string;
 }
 
 export interface EventDates {

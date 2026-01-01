@@ -45,7 +45,6 @@ export async function POST(request: Request) {
     display_handle,
     display_description,
     original_link,
-    nomination_id,
   } = body;
 
   // Intentar obtener imagen de Twitter si hay handle

@@ -17,7 +17,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const handleSignIn = async () => {
     setLoading(true);
     try {
-      await signIn("google");
+      await signIn();
     } catch (error) {
       console.error("Error signing in:", error);
       setLoading(false);
