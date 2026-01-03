@@ -19,7 +19,6 @@ export interface Profile {
   id: string;
   username: string | null;
   avatar_url: string | null;
-  is_admin: boolean;
 }
 
 export interface Nomination {
@@ -30,7 +29,6 @@ export interface Nomination {
   nominated_link: string | null;
   nominated_text: string | null;
   is_deleted_content: boolean;
-  nomination_count: number;
 }
 
 export interface Finalist {
@@ -54,33 +52,17 @@ export interface Vote {
   category_id: number;
 }
 
-export interface PhaseInfo {
-  phase: EventPhase;
-  message: string;
-  endDate: Date | null;
-  showCountdown: boolean;
-}
-
 export interface EventConfig {
   id: number;
-  // Fechas
-  nominations_start: string;
   nominations_end: string;
   curation_end: string;
   voting_end: string;
   gala_start: string;
-  gala_end: string;
-  // Control
   force_phase: EventPhase | null;
-  gala_active: boolean;
   results_public: boolean;
 }
 
-export interface EventDates {
-  nominationsStart: Date;
-  nominationsEnd: Date;
-  curationEnd: Date;
-  votingEnd: Date;
-  galaStart: Date;
-  galaEnd: Date;
+// Tipos para joins
+export interface FinalistWithCategory extends Finalist {
+  category: Category;
 }
