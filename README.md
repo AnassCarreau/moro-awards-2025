@@ -1,86 +1,87 @@
-# Moro Awards 2025
+# Moro Awards 2025 🏆
 
-Plataforma de votación y premios para los Moro Awards 2025. Construida con tecnologías web modernas para ofrecer una experiencia rápida, interactiva y segura.
+Plataforma oficial de votación y premios para los **Moro Awards 2025**. Una aplicación web interactiva diseñada para gestionar todo el ciclo de vida del evento, desde las nominaciones hasta la gala en vivo.
 
 ## 🚀 Tecnologías
 
-Este proyecto utiliza el siguiente stack tecnológico:
+Este proyecto está construido con un stack moderno enfocado en rendimiento y experiencia de usuario:
 
-- **Framework:** [Next.js 16](https://nextjs.org/) (App Router)
+- **Framework:** [Next.js 14](https://nextjs.org/) (App Router & Server Actions)
 - **Lenguaje:** [TypeScript](https://www.typescriptlang.org/)
-- **Estilos:** [Tailwind CSS 4](https://tailwindcss.com/)
-- **Base de Datos & Auth:** [Supabase](https://supabase.com/)
+- **Base de Datos & Auth:** [Supabase](https://supabase.com/) (PostgreSQL + Google OAuth)
+- **Estilos:** [Tailwind CSS 3](https://tailwindcss.com/)
 - **Animaciones:** [Framer Motion](https://www.framer.com/motion/)
-- **Iconos:** [Lucide React](https://lucide.dev/)
 - **Testing:** [Playwright](https://playwright.dev/)
+- **Despliegue:** Optimizado para [Netlify](https://www.netlify.com/)
 
 ## ✨ Características Principales
 
-- **Sistema de Votación:** Interfaz segura para que los usuarios voten por sus favoritos.
-- **Nominaciones:** Módulo para gestionar y visualizar nominados.
-- **Panel de Administración:**
-  - Configuración general del evento.
-  - Curación de contenido.
-  - Control en tiempo real de la Gala.
-- **Gala en Vivo:** Vista dedicada para el evento en vivo.
-- **Resultados:** Visualización de ganadores y estadísticas.
-- **Gestión de Fases:** Control de las etapas del evento (Nominación, Votación, Resultados, etc.).
+- **Sistema de Fases Automático:** Control temporal del evento (Nominaciones → Curación → Votación → Gala → Resultados) gestionado centralizadamente.
+- **Votación Segura:** Autenticación mediante Google para garantizar un voto único por usuario.
+- **Modo Gala en Vivo:** Interfaz inmersiva con revelación de ganadores en tiempo real.
+- **Nominaciones Dinámicas:** Soporte para nominaciones por usuario, enlace o texto según la categoría.
 
 ## 🛠️ Configuración Local
 
-### Prerrequisitos
+Sigue estos pasos para ejecutar el proyecto en tu máquina.
 
-- Node.js 18+
-- npm, pnpm o yarn
+### 1. Prerrequisitos
 
-### Variables de Entorno
+- Node.js 18 o superior.
+- Una cuenta y proyecto creado en Supabase.
 
-Crea un archivo `.env.local` en la raíz del proyecto con las credenciales de tu proyecto en Supabase:
+### 2. Variables de Entorno
+
+Crea un archivo `.env.local` en la raíz del proyecto y añade tus credenciales:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=tu_url_de_supabase
+NEXT_PUBLIC_SUPABASE_URL=tuh_url_de_supabase
 NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_anon_key_de_supabase
-```
+3. Instalación
+Instala las dependencias del proyecto:
 
-### Instalación y Ejecución
+Bash
 
-1. Instalar dependencias:
-   ```bash
-   npm install
-   ```
+npm install
+4. Ejecución
+Inicia el servidor de desarrollo:
 
-2. Ejecutar el servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
+Bash
 
-3. Abrir [http://localhost:3000](http://localhost:3000) en tu navegador.
+npm run dev
+Abre http://localhost:3000 en tu navegador para ver la aplicación.
 
-## 📂 Estructura del Proyecto
+🧪 Tests
+Este proyecto utiliza Playwright para pruebas end-to-end (E2E).
 
-```
+Bash
+
+# Ejecutar todos los tests
+npx playwright test
+
+# Ejecutar tests con interfaz gráfica
+npx playwright test --ui
+📂 Estructura del Proyecto
+Plaintext
+
 src/
 ├── app/                  # Rutas y páginas (App Router)
-│   ├── admin/            # Panel de administración
-│   ├── api/              # Endpoints API
-│   ├── auth/             # Autenticación
-│   ├── votar/            # Página de votación
-│   ├── gala/             # Página de la gala
-│   └── ...
-├── components/           # Componentes reutilizables
-│   ├── ui/               # Componentes base (botones, inputs, etc.)
-│   ├── auth/             # Componentes de autenticación
-│   └── ...
+│   ├── api/              # Endpoints de API y Webhooks
+│   ├── auth/             # Callbacks de autenticación
+│   ├── gala/             # Vista del evento en vivo
+│   ├── nominar/          # Flujo de nominaciones
+│   └── votar/            # Flujo de votación
+├── components/           # Componentes de React reutilizables
+│   ├── ui/               # Componentes base (Botones, Inputs, Cards)
+│   └── ...               # Componentes específicos (Gala, Votación)
 ├── lib/                  # Utilidades y lógica de negocio
-│   ├── supabase/         # Cliente y utilidades de Supabase
-│   └── phases.ts         # Gestión de fases del evento
-└── types/                # Definiciones de tipos TypeScript
-```
+│   ├── supabase/         # Cliente y Middleware de Supabase
+│   └── phases.ts         # Máquina de estados de las fases del evento
+└── types/                # Definiciones de tipos TypeScript (Database, Config)
+🔒 Privacidad y OAuth
+Este proyecto utiliza Google OAuth para la autenticación de usuarios.
 
-## 🧪 Tests
+La política de privacidad se encuentra disponible en https://morotw2025.netlify.app/privacy.
 
-Para ejecutar las pruebas end-to-end con Playwright:
-
-```bash
-npx playwright test
+Solo se recopilan datos públicos para la validación única de votos y nominaciones.
 ```

@@ -7,10 +7,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Moro TW Awards 2025",
-  description: "Los premios más importantes de Twitter España",
+  description: "Los premios más importantes de MoroTwitter",
   openGraph: {
     title: "Moro TW Awards 2025",
-    description: "Los premios más importantes de Twitter España",
+    description: "Los premios más importantes de MoroTwitter",
     type: "website",
   },
 };

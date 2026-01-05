@@ -36,7 +36,6 @@ export interface Finalist {
   category_id: number;
   display_name: string;
   display_handle: string | null;
-  display_image: string | null;
   display_description: string | null;
   original_link: string | null;
   vote_count: number;

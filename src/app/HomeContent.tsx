@@ -246,7 +246,7 @@ export function HomeContent({ initialPhaseInfo }: HomeContentProps) {
             <InfoCard
               icon={<Sparkles className="w-8 h-8" />}
               title="1. Nominaciones"
-              description="Propón a tus favoritos en 24 categorías épicas del Twitter español"
+              description="Propón a tus favoritos en 24 categorías épicas"
               isActive={currentPhase.phase === "nominations"}
               delay={0}
             />
@@ -270,6 +270,17 @@ export function HomeContent({ initialPhaseInfo }: HomeContentProps) {
           </div>
         </div>
       </section>
+      {/* Footer con link a privacidad */}
+      <footer className="py-8 px-4 border-t border-dark-800">
+        <div className="max-w-6xl mx-auto flex justify-center gap-6 text-sm text-dark-500">
+          <Link
+            href="/privacy"
+            className="hover:text-gold-400 transition-colors"
+          >
+            Política de Privacidad
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 }

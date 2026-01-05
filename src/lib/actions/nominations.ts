@@ -134,20 +134,3 @@ export async function getCategories() {
 
   return data;
 }
-
-export async function getUserNominations(userId: string) {
-  const supabase = await createClient();
-
-  const { data, error } = await supabase
-    .from("nominations")
-    .select("*, category:categories(*)")
-    .eq("user_id", userId)
-    .order("category_id", { ascending: true });
-
-  if (error) {
-    console.error("Error fetching user nominations:", error);
-    return [];
-  }
-
-  return data;
-}

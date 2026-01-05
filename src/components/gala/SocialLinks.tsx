@@ -10,8 +10,8 @@ interface SocialLinksProps {
 }
 
 export function SocialLinks({
-  twitterSpaceUrl = process.env.NEXT_PUBLIC_TWITTER_SPACE_URL || "#",
-  discordUrl = process.env.NEXT_PUBLIC_DISCORD_URL || "#",
+  twitterSpaceUrl = "https://dub.sh/SixSeven",
+  discordUrl = "https://discord.gg/FGEgDZCwyQ",
 }: SocialLinksProps) {
   return (
     <motion.div
