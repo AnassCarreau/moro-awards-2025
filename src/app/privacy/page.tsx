@@ -156,7 +156,7 @@ export default function PrivacidadPage() {
               <div className="pl-11 space-y-4">
                 <p className="text-dark-300 leading-relaxed">
                   Con <strong className="text-white">Google OAuth</strong>{" "}
-                  recopilamos el mínimo necesario para prevenir fraude:
+                  recopilamos únicamente:
                 </p>
 
                 <div className="grid gap-3">
@@ -184,22 +184,6 @@ export default function PrivacidadPage() {
                         . Nunca se muestra públicamente. Las políticas de
                         seguridad impiden que nadie acceda a la relación entre
                         tu ID y tus votos.
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3 p-3 bg-dark-800/50 rounded-lg border border-dark-700">
-                    <span className="text-2xl mt-0.5">👤</span>
-                    <div>
-                      <strong className="text-white">
-                        Nombre de usuario (solo interno)
-                      </strong>
-                      <p className="text-sm text-dark-400 mt-1 m-0">
-                        Solo para control técnico.{" "}
-                        <strong className="text-gold-400">
-                          Nunca se muestra en la interfaz
-                        </strong>{" "}
-                        ni se comparte públicamente.
                       </p>
                     </div>
                   </div>
@@ -567,7 +551,7 @@ export default function PrivacidadPage() {
                       <strong className="text-white">
                         📅 Datos personales:
                       </strong>{" "}
-                      Foto, ID de Google y nombre se eliminan{" "}
+                      Foto y ID de Google se eliminan{" "}
                       <strong className="text-white">
                         3 días después de la gala
                       </strong>
